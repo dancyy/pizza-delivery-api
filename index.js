@@ -2,14 +2,18 @@
  * Primary File fo API
  */
 
- // Dependencies 
- const http = require('http');
- const url = require('url');
- const { StringDecoder } = require('string_decoder');
- const config = require('./config');
- 
+// Dependencies 
+const http = require('http');
+const url = require('url');
+const { StringDecoder } = require('string_decoder');
+const config = require('./config');
+const usersHandler = require('./lib/handlers/usersHandler');
+const _data = require('./lib/data');
 
- // Intantiate the HTTP server
+// @todo
+_data.create('users', 'testFile', {'message': 'yooo'});
+ 
+// Intantiate the HTTP server
 var httpServer = http.createServer((req, res) => {
     
     // Get the Url and parse it
@@ -76,21 +80,7 @@ var httpServer = http.createServer((req, res) => {
      console.log(`The Server is running on port ${config.httpPort}`)
  });
 
- // Define the handlers
- let handlers = {};
-
- // hello handler
- handlers.users = (data, callback) => {
-     callback(200, {'message' : 'Hello World'})
- };
-
- // Not Found handler
- handlers.notFound = (data, callback) => {
-    callback(404, {'Error' : 'This page does not exist'});
- };
-
-
  // Define the request router
  const router = {
-     'users' : handlers.users 
+     'users' : usersHandler.users 
  };
