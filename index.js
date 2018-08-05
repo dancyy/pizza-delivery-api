@@ -9,9 +9,6 @@ const { StringDecoder } = require('string_decoder');
 const config = require('./config');
 const usersHandler = require('./lib/handlers/usersHandler');
 const _data = require('./lib/data');
-
-// @todo
-_data.create('users', 'testFile', {'message': 'yooo'});
  
 // Intantiate the HTTP server
 var httpServer = http.createServer((req, res) => {
