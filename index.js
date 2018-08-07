@@ -7,8 +7,7 @@ const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const config = require('./config');
-const usersHandler = require('./lib/handlers/usersHandler');
-const _data = require('./lib/data');
+const { users } = require('./lib/handlers/usersHandler');
  
 // Intantiate the HTTP server
 var httpServer = http.createServer((req, res) => {
@@ -30,7 +29,7 @@ var httpServer = http.createServer((req, res) => {
     const headers = req.headers;
 
     // Get the payload, if any
-    var decoder = new StringDecoder('utf-8');
+    const decoder = new StringDecoder('utf-8');
     let buffer = '';
     req.on('data', (data) => {
         buffer += decoder.write(data);
@@ -38,7 +37,7 @@ var httpServer = http.createServer((req, res) => {
     req.on('end', () => {
         buffer += decoder.end();
 
-        // Choose the handler this request should go to. If handler does not exist route to not found
+        // Choose the handler this request should go to. If path does not exist route to not found
         const chooseHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
 
         // Construct the data object to be sent to the handler
@@ -47,14 +46,13 @@ var httpServer = http.createServer((req, res) => {
             'queryStringObject' : queryStringObject,
             'method' : method,
             'headers' : headers,
-            'payload' : buffer
+            'payload' : buffer ? JSON.parse(buffer) : {}
         };
 
         // Route the request to the the appropiate handler
         chooseHandler(data, (statusCode, payload) => {
             // Use the status code called back by the user or default to 200
             statusCode = typeof(statusCode) =='number' ? statusCode : 200;
-
             // Use the payload called back by the handler of default to an empty object
             payload = typeof(payload) == 'object' ? payload : {};
 
@@ -69,15 +67,14 @@ var httpServer = http.createServer((req, res) => {
             console.log('Returning this response :', statusCode, payloadString);
         });
     });
-    
  });
 
- // Start the HTTP Server
- httpServer.listen(config.httpPort, () => {
-     console.log(`The Server is running on port ${config.httpPort}`)
- });
+// Start the HTTP Server
+httpServer.listen(config.httpPort, () => {
+    console.log(`The Server is running on port ${config.httpPort}`)
+});
 
  // Define the request router
  const router = {
-     'users' : usersHandler.users 
+     'users' : users 
  };
