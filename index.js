@@ -7,7 +7,7 @@ const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const config = require('./config');
-const { users, notFound } = require('./lib/handlers');
+const { users, tokens, notFound } = require('./lib/handlers');
  
 // Intantiate the HTTP server
 var httpServer = http.createServer((req, res) => {
@@ -76,5 +76,6 @@ httpServer.listen(config.httpPort, () => {
 
  // Define the request router
  const router = {
-     'users' : users 
+     'users' : users,
+     'tokens' : tokens
  };
