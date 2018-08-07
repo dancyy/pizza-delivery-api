@@ -7,7 +7,7 @@ const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const config = require('./config');
-const { users } = require('./lib/handlers/usersHandler');
+const { users, notFound } = require('./lib/handlers');
  
 // Intantiate the HTTP server
 var httpServer = http.createServer((req, res) => {
@@ -38,7 +38,7 @@ var httpServer = http.createServer((req, res) => {
         buffer += decoder.end();
 
         // Choose the handler this request should go to. If path does not exist route to not found
-        const chooseHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : handlers.notFound;
+        const chooseHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : notFound;
 
         // Construct the data object to be sent to the handler
         const data = {
