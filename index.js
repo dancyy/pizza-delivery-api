@@ -12,7 +12,7 @@
 
 // [x] 3. When a user is logged in, they should be able to GET all the possible menu items (these items can be hardcoded into the system).
 
-// [ ] 4. A logged-in user should be able to fill a shopping cart with menu items
+// [x] 4. A logged-in user should be able to fill a shopping cart with menu items
 
 // [ ] 5. A logged-in user should be able to create an order. You should integrate with the Sandbox of Stripe.com to accept their payment. Note: Use the stripe sandbox for your testing. Follow this link and click on the "tokens" tab to see the fake tokens you can use server-side to confirm the integration is working: https://stripe.com/docs/testing#cards
 
@@ -24,7 +24,7 @@ const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const config = require('./config');
-const { users, tokens, menus, carts, notFound } = require('./lib/handlers');
+const { users, tokens, menus, carts, orders, notFound } = require('./lib/handlers');
  
 // Intantiate the HTTP server
 var httpServer = http.createServer((req, res) => {
@@ -96,5 +96,6 @@ httpServer.listen(config.httpPort, () => {
      'users' : users,
      'tokens' : tokens,
      'menus' : menus,
-     'carts' : carts
+     'carts' : carts,
+     'orders' : orders
  };
